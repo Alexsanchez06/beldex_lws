@@ -32,12 +32,14 @@ project(monero-lws)
 enable_language(CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 
 set(MONERO_LIBRARIES
   daemon_messages
   serialization
   lmdb_lib
-  net
+#   net
   cryptonote_core
   cryptonote_basic
   cryptonote_format_utils_basic
@@ -51,7 +53,7 @@ set(MONERO_LIBRARIES
   lmdb
   device
   cncrypto
-  randomx
+#   randomx
   epee
   easylogging
   version
@@ -80,43 +82,45 @@ set(MONERO_SEARCH_PATHS
 #
 
 # Needed due to "bug" in monero CMake - the `project` function is used twice!
-if (NOT MONERO_SOURCE_DIR)
-  message(FATAL_ERROR "The argument -DMONERO_SOURCE_DIR must specify a location of a monero source tree")
+if (NOT BELDEX_SOURCE_DIR)
+  message(FATAL_ERROR "The argument -DBELDEX_SOURCE_DIR must specify a location of a monero source tree")
 endif()
 
-if (NOT MONERO_BUILD_DIR)
-  message(FATAL_ERROR "The argument -DMONERO_BUILD_DIR must specify a location of an existing monero build")
+if (NOT BELDEX_BUILD_DIR)
+  message(FATAL_ERROR "The argument -DBELDEX_BUILD_DIR must specify a location of an existing monero build")
 endif()
-
-load_cache(${MONERO_BUILD_DIR} READ_WITH_PREFIX monero_
+message("build dir " ${BELDEX_BUILD_DIR})
+load_cache(${BELDEX_BUILD_DIR} READ_WITH_PREFIX beldex_
   Boost_THREAD_LIBRARY_RELEASE
   CMAKE_CXX_COMPILER
   EXTRA_LIBRARIES
   HIDAPI_LIBRARY
   LMDB_INCLUDE
-  monero_SOURCE_DIR
+  beldex_SOURCE_DIR
   OPENSSL_CRYPTO_LIBRARY
   OPENSSL_SSL_LIBRARY
   SODIUM_LIBRARY
   UNBOUND_LIBRARIES
   ZMQ_INCLUDE_PATH
   ZMQ_LIB
+  USE_READLINE
 )
+message(${BELDEX_SOURCE_DIR} " <----> " ${BELDEX_BUILD_DIR})
 
-if (NOT (monero_monero_SOURCE_DIR MATCHES "${MONERO_SOURCE_DIR}(/src/cryptonote_protocol)"))
+if (NOT (beldex_beldex_SOURCE_DIR MATCHES "${BELDEX_SOURCE_DIR}"))
   message(FATAL_ERROR "Invalid Monero source dir - does not appear to match source used for build directory")
 endif()
 
-if (NOT (CMAKE_CXX_COMPILER STREQUAL monero_CMAKE_CXX_COMPILER))
+if (NOT (CMAKE_CXX_COMPILER STREQUAL beldex_CMAKE_CXX_COMPILER))
   message(FATAL_ERROR "Compiler for monero build differs from this project")
 endif()
 
-if ("${monero_UNBOUND_LIBRARIES}" STREQUAL "UNBOUND_LIBRARIES-NOTFOUND")
-  unset(monero_UNBOUND_LIBRARIES)
+if ("${beldex_UNBOUND_LIBRARIES}" STREQUAL "UNBOUND_LIBRARIES-NOTFOUND")
+  unset(beldex_UNBOUND_LIBRARIES)
 endif()
 
-if ("${monero_HIDAPI_LIBRARY}" STREQUAL "HIDAPI_LIBRARY-NOTFOUND")
-  unset(monero_HIDAPI_LIBRARY)
+if ("${beldex_HIDAPI_LIBRARY}" STREQUAL "HIDAPI_LIBRARY-NOTFOUND")
+  unset(beldex_HIDAPI_LIBRARY)
 endif()
 
 #
@@ -129,14 +133,15 @@ find_package(Threads REQUIRED)
 set(Boost_NO_BOOST_CMAKE ON)
 find_package(Boost 1.58 QUIET REQUIRED COMPONENTS chrono filesystem program_options regex serialization system thread)
 
-if (NOT (Boost_THREAD_LIBRARY STREQUAL monero_Boost_THREAD_LIBRARY_RELEASE))
+if (NOT (Boost_THREAD_LIBRARY STREQUAL beldex_Boost_THREAD_LIBRARY_RELEASE))
   message(STATUS "Found Boost_THREAD_LIBRARY: ${Boost_THREAD_LIBRARY}")
-  message(STATUS "Found monero_Boost_THREAD_LIBRARY_RELEASE: ${monero_Boost_THREAD_LIBRARY_RELEASE}")
+  message(STATUS "Found beldex_Boost_THREAD_LIBRARY_RELEASE: ${beldex_Boost_THREAD_LIBRARY_RELEASE}")
   message(FATAL_ERROR "Boost libraries for monero build differs from this project")
 endif()
 
 foreach (LIB ${MONERO_LIBRARIES})
-  find_library(LIB_PATH NAMES "${LIB}" PATHS ${MONERO_BUILD_DIR} PATH_SUFFIXES "/src/${LIB}" "external/${LIB}" ${MONERO_SEARCH_PATHS} NO_DEFAULT_PATH)
+message("${LIB}" " -- " "${LIB_PATH}" " -- " "${PATH_SUFFIXES} ${BELDEX_BUILD_DIR}")
+  find_library(LIB_PATH NAMES "${LIB}" PATHS ${BELDEX_BUILD_DIR} PATH_SUFFIXES "/src/${LIB}" "external/${LIB}" ${MONERO_SEARCH_PATHS} NO_DEFAULT_PATH)
 
   list(FIND MONERO_OPTIONAL "${LIB}" LIB_OPTIONAL)
   if (NOT LIB_PATH)
@@ -152,17 +157,17 @@ foreach (LIB ${MONERO_LIBRARIES})
   
   unset(LIB_PATH CACHE)
 endforeach()
-
+message("before add" "${Boost_INCLUDE_DIR}")
 add_library(monero::libraries INTERFACE IMPORTED)
 set_property(TARGET monero::libraries PROPERTY
   INTERFACE_INCLUDE_DIRECTORIES
     ${Boost_INCLUDE_DIR}
-    "${MONERO_BUILD_DIR}/generated_include"
-    "${MONERO_SOURCE_DIR}/contrib/epee/include"
-    "${MONERO_SOURCE_DIR}/external/easylogging++"
-    "${MONERO_SOURCE_DIR}/external/rapidjson/include"
-    "${MONERO_SOURCE_DIR}/external/supercop/include"
-    "${MONERO_SOURCE_DIR}/src"
+    # "${BELDEX_BUILD_DIR}/generated_include"
+    "${BELDEX_SOURCE_DIR}/contrib/epee/include"
+    "${BELDEX_SOURCE_DIR}/external/easylogging++"
+    "${BELDEX_SOURCE_DIR}/external/rapidjson/include"
+    # "${BELDEX_SOURCE_DIR}/external/supercop/include"
+    "${BELDEX_SOURCE_DIR}/src"
 )
 set_property(TARGET monero::libraries PROPERTY
   INTERFACE_LINK_LIBRARIES
@@ -173,18 +178,18 @@ set_property(TARGET monero::libraries PROPERTY
     ${Boost_SERIALIZATION_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
     ${Boost_THREAD_LIBRARY}
-    ${monero_HIDAPI_LIBRARY}
-    ${monero_OPENSSL_CRYPTO_LIBRARY}
-    ${monero_OPENSSL_SSL_LIBRARY}
-    ${monero_SODIUM_LIBRARY}
-    ${monero_UNBOUND_LIBRARIES}
+    ${beldex_HIDAPI_LIBRARY}
+    ${beldex_OPENSSL_CRYPTO_LIBRARY}
+    ${beldex_OPENSSL_SSL_LIBRARY}
+    ${beldex_SODIUM_LIBRARY}
+    ${beldex_UNBOUND_LIBRARIES}
     ${CMAKE_DL_LIBS}
 )
 
-set(LMDB_INCLUDE "${monero_LMDB_INCLUDE}")
+set(LMDB_INCLUDE "${beldex_LMDB_INCLUDE}")
 set(LMDB_LIB_PATH "monero::lmdb")
-set(ZMQ_LIB "${monero_ZMQ_LIB}")
-set(ZMQ_INCLUDE_PATH "${monero_ZMQ_INCLUDE_PATH}")
+set(ZMQ_LIB "${beldex_ZMQ_LIB}")
+set(ZMQ_INCLUDE_PATH "${beldex_ZMQ_INCLUDE_PATH}")
 
 
 #
