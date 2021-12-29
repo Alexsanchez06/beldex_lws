@@ -39,21 +39,21 @@ set(MONERO_LIBRARIES
   daemon_messages
   serialization
   lmdb_lib
-#   net
+  net
   cryptonote_core
   cryptonote_basic
-  cryptonote_format_utils_basic
+  cryptonote_format_utils
   ringct
   ringct_basic
   multisig
-  hardforks
+  hardfork
   checkpoints
   blockchain_db
   common
   lmdb
   device
   cncrypto
-#   randomx
+  randomx
   epee
   easylogging
   version
@@ -66,7 +66,7 @@ set(MONERO_OPTIONAL unbound wallet-crypto)
 set(MONERO_SEARCH_PATHS
   "/contrib/epee/src"
   "/external/db_drivers/liblmdb"
-  "/external/easylogging++"
+  "/external/easyloggingpp"
   "/src"
   "/src/crypto"
   "/src/crypto/wallet"
