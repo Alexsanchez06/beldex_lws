@@ -44,14 +44,14 @@
 #include "db/account.h"
 #include "db/string.h"
 #include "error.h"
-#include "hex.h"
+#include "epee/hex.h"
 #include "lmdb/database.h"
 #include "lmdb/error.h"
 #include "lmdb/key_stream.h"
 #include "lmdb/table.h"
 #include "lmdb/util.h"
 #include "lmdb/value_stream.h"
-#include "span.h"
+#include "epee/span.h"
 #include "wire/filters.h"
 #include "wire/json.h"
 
@@ -253,20 +253,20 @@ namespace db
         {
           data.init_default_checkpoints(lws::config::network);
 
-          std::string const* genesis_tx = nullptr;
+          std::string_view const* genesis_tx = nullptr;
           std::uint32_t genesis_nonce = 0;
 
           switch (lws::config::network)
           {
-          case cryptonote::TESTNET:
-            genesis_tx = std::addressof(::config::testnet::GENESIS_TX);
-            genesis_nonce = ::config::testnet::GENESIS_NONCE;
-            break;
+          // case cryptonote::TESTNET:
+          //   genesis_tx = std::addressof(::config::testnet::GENESIS_TX);
+          //   genesis_nonce = ::config::testnet::GENESIS_NONCE;
+          //   break;
 
-          case cryptonote::STAGENET:
-            genesis_tx = std::addressof(::config::stagenet::GENESIS_TX);
-            genesis_nonce = ::config::stagenet::GENESIS_NONCE;
-            break;
+          // case cryptonote::STAGENET:
+          //   genesis_tx = std::addressof(::config::stagenet::GENESIS_TX);
+          //   genesis_nonce = ::config::stagenet::GENESIS_NONCE;
+          //   break;
 
           case cryptonote::MAINNET:
             genesis_tx = std::addressof(::config::GENESIS_TX);
@@ -277,7 +277,7 @@ namespace db
             MONERO_THROW(lws::error::bad_blockchain, "Unsupported net type");
           }
           cryptonote::block b;
-          cryptonote::generate_genesis_block(b, *genesis_tx, genesis_nonce);
+          cryptonote::generate_genesis_block(b,lws::config::network);
           crypto::hash block_hash = cryptonote::get_block_hash(b);
           if (!data.add_checkpoint(0, epee::to_hex::string(epee::as_byte_span(block_hash))))
             MONERO_THROW(lws::error::bad_blockchain, "Genesis tx and checkpoints file mismatch");

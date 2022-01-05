@@ -33,8 +33,8 @@
 #include <limits>
 #include <rapidjson/writer.h>
 
-#include "byte_stream.h" // monero/contrib/epee/include
-#include "span.h"        // monero/contrib/epee/include
+#include "epee/byte_stream.h" // monero/contrib/epee/include
+#include "epee/span.h"        // monero/contrib/epee/include
 #include "wire/field.h"
 #include "wire/filters.h"
 #include "wire/json/base.h"

@@ -30,7 +30,7 @@ cmake_minimum_required(VERSION 3.1.0)
 project(monero-lws)
 
 enable_language(CXX)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -166,6 +166,7 @@ set_property(TARGET monero::libraries PROPERTY
     "${BELDEX_SOURCE_DIR}/contrib/epee/include"
     "${BELDEX_SOURCE_DIR}/external/easylogging++"
     "${BELDEX_SOURCE_DIR}/external/rapidjson/include"
+    "${BELDEX_SOURCE_DIR}/external/loki-mq"
     # "${BELDEX_SOURCE_DIR}/external/supercop/include"
     "${BELDEX_SOURCE_DIR}/src"
 )

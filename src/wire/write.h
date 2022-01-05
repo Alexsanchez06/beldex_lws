@@ -32,8 +32,8 @@
 #include <cstdint>
 #include <type_traits>
 
-#include "byte_slice.h" // monero/contrib/epee/include
-#include "span.h"       // monero/contrib/epee/include
+#include "epee/byte_slice.h" // monero/contrib/epee/include
+#include "epee/span.h"       // monero/contrib/epee/include
 #include "wire/field.h"
 #include "wire/filters.h"
 #include "wire/traits.h"

@@ -31,7 +31,7 @@
 #include <system_error>
 #include <type_traits>
 
-#include "misc_log_ex.h" // monero/contrib/epee/include
+#include "epee/misc_log_ex.h" // monero/contrib/epee/include
 
 //! Print default `code` message followed by optional message to debug log then throw `code`.
 #define WIRE_DLOG_THROW_(code, ...)					\

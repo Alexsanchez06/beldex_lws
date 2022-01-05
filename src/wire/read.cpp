@@ -57,5 +57,3 @@ void wire::reader::increment_depth()
   }
   WIRE_DLOG_THROW(code, display << (name ? name : ""));
 }
-
-

@@ -33,7 +33,7 @@
 #include <stdexcept>
 
 #include "common/expect.h" // monero/src
-#include "hex.h"           // monero/contrib/epee/include
+#include "epee/hex.h"           // monero/contrib/epee/include
 #include "wire/error.h"
 #include "wire/json/error.h"
 

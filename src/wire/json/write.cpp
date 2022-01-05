@@ -30,7 +30,7 @@
 #include <ostream>
 #include <stdexcept>
 
-#include "hex.h" // monero/contrib/epee/include
+#include "epee/hex.h" // monero/contrib/epee/include
 
 namespace
 {

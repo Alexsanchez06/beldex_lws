@@ -159,7 +159,7 @@ namespace db
   }
   void read_bytes(wire::reader& source, spend& dest)
   {
-    boost::optional<crypto::hash> payment_id;
+    std::optional<crypto::hash> payment_id;
     map_spend(source, dest, payment_id);
 
     if (payment_id)

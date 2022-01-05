@@ -35,7 +35,7 @@
 #include <vector>
 
 #include "common/expect.h" // monero/src
-#include "span.h"          // monero/contrib/epee/include
+#include "epee/span.h"          // monero/contrib/epee/include
 #include "wire/error.h"
 #include "wire/field.h"
 #include "wire/traits.h"
