@@ -34,9 +34,9 @@
 #include <vector>
 
 #include "db/storage.h"
-#include "net/net_ssl.h"
+#include "epee/net/net_ssl.h"
 #include "rpc/client.h"
-#include "span.h"
+#include "epee/span.h"
 
 namespace lws
 {

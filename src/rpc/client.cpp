@@ -34,9 +34,9 @@
 
 #include "common/error.h"    // monero/contrib/epee/include
 #include "error.h"
-#include "misc_log_ex.h"     // monero/contrib/epee/include
-#include "net/http_client.h" // monero/contrib/epee/include
-#include "net/zmq.h"         // monero/src
+#include "epee/misc_log_ex.h"     // monero/contrib/epee/include
+#include "epee/net/http_client.h" // monero/contrib/epee/include
+#include "epee/net/zmq.h"         // monero/src
 #include "serialization/json_object.h" // monero/src
 
 namespace lws

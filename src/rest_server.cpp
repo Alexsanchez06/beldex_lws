@@ -41,8 +41,8 @@
 #include "db/storage.h"
 #include "error.h"
 #include "lmdb/util.h"                 // monero/src
-#include "net/http_base.h"             // monero/contrib/epee/include
-#include "net/net_parse_helpers.h"     // monero/contrib/epee/include
+#include "epee/net/http_base.h"             // monero/contrib/epee/include
+#include "epee/net/net_parse_helpers.h"     // monero/contrib/epee/include
 #include "rpc/client.h"
 #include "rpc/daemon_messages.h"       // monero/src
 #include "rpc/light_wallet.h"

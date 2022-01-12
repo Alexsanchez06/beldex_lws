@@ -40,13 +40,13 @@
 
 #include "common/error.h"                             // monero/src
 #include "crypto/crypto.h"                            // monero/src
-#include "crypto/wallet/crypto.h"                     // monero/src
+// #include "crypto/wallet/crypto.h"                     // monero/src
 #include "cryptonote_basic/cryptonote_basic.h"        // monero/src
 #include "cryptonote_basic/cryptonote_format_utils.h" // monero/src
 #include "db/account.h"
 #include "db/data.h"
 #include "error.h"
-#include "misc_log_ex.h"             // monero/contrib/epee/include
+#include "epee/misc_log_ex.h"             // monero/contrib/epee/include
 #include "rpc/daemon_messages.h"     // monero/src
 #include "rpc/daemon_zmq.h"
 #include "rpc/json.h"
@@ -163,7 +163,7 @@ namespace lws
       cryptonote::transaction const& tx,
       std::vector<std::uint64_t> const& out_ids)
     {
-      if (2 < tx.version)
+      if (cryptonote::txversion::v2_ringct < tx.version)
         throw std::runtime_error{"Unsupported tx version"};
 
       cryptonote::tx_extra_pub_key key;
@@ -195,7 +195,7 @@ namespace lws
           continue; // to next user
 
         crypto::key_derivation derived;
-        if (!crypto::wallet::generate_key_derivation(key.pub_key, user.view_key(), derived))
+        if (!crypto::generate_key_derivation(key.pub_key, user.view_key(), derived))
           continue; // to next user
 
         db::extra ext{};
@@ -203,7 +203,7 @@ namespace lws
         for (auto const& in : tx.vin)
         {
           cryptonote::txin_to_key const* const in_data =
-            boost::get<cryptonote::txin_to_key>(std::addressof(in));
+            std::get_if<cryptonote::txin_to_key>(std::addressof(in));
           if (in_data)
           {
             mixin = boost::numeric_cast<std::uint32_t>(
@@ -232,7 +232,7 @@ namespace lws
               }
             }
           }
-          else if (boost::get<cryptonote::txin_gen>(std::addressof(in)))
+          else if (std::get_if<cryptonote::txin_gen>(std::addressof(in)))
             ext = db::extra(ext | db::coinbase_output);
         }
 
@@ -242,13 +242,13 @@ namespace lws
           ++index;
 
           cryptonote::txout_to_key const* const out_data =
-            boost::get<cryptonote::txout_to_key>(std::addressof(out.target));
+            std::get_if<cryptonote::txout_to_key>(std::addressof(out.target));
           if (!out_data)
             continue; // to next output
 
           crypto::public_key derived_pub;
           const bool received =
-            crypto::wallet::derive_subaddress_public_key(out_data->key, derived, index, derived_pub) &&
+            crypto::derive_subaddress_public_key(out_data->key, derived, index, derived_pub) &&
             derived_pub == user.spend_public();
 
           if (!received)
@@ -262,9 +262,9 @@ namespace lws
 
           std::uint64_t amount = out.amount;
           rct::key mask = rct::identity();
-          if (!amount && !(ext & db::coinbase_output) && 1 < tx.version)
+          if (!amount && !(ext & db::coinbase_output) && cryptonote::txversion::v1 < tx.version)
           {
-            const bool bulletproof2 = (rct::RCTTypeBulletproof2 <= tx.rct_signatures.type);
+            const bool bulletproof2 = (rct::RCTType::Bulletproof2 <= tx.rct_signatures.type);
             const auto decrypted = lws::decode_amount(
               tx.rct_signatures.outPk.at(index).mask, tx.rct_signatures.ecdhInfo.at(index), derived, index, bulletproof2
             );

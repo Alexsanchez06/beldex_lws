@@ -28,7 +28,7 @@
 
 #include <string>
 
-#include "byte_slice.h"
+#include "epee/byte_slice.h"
 #include "common/expect.h"
 #include "wire/json/fwd.h"
 

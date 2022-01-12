@@ -33,7 +33,7 @@
 
 #include "common/expect.h"            // monero/src
 #include "rpc/message_data_structs.h" // monero/src
-#include "span.h"                     // monero/src
+#include "epee/span.h"                     // monero/src
 #include "util/fwd.h"
 
 namespace lws

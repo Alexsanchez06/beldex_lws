@@ -74,8 +74,8 @@ namespace
       {
       case cryptonote::TESTNET:
         return base + std::to_string(config::testnet::ZMQ_RPC_DEFAULT_PORT);
-      case cryptonote::STAGENET:
-        return base + std::to_string(config::stagenet::ZMQ_RPC_DEFAULT_PORT);
+      case cryptonote::DEVNET:
+        return base + std::to_string(config::devnet::ZMQ_RPC_DEFAULT_PORT);
       case cryptonote::MAINNET:
       default:
         break;

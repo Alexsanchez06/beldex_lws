@@ -321,7 +321,7 @@ namespace wire_read
   template<typename R, typename T>
   inline void unpack_field(std::size_t, R& source, wire::field_<T, true>& dest)
   {
-    read_bytes(source, dest.get_value());
+    // read_bytes(source, dest.get_value());
   }
 
   template<typename R, typename T>
