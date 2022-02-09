@@ -70,7 +70,7 @@ namespace rct
       wire::optional_field("fee", std::ref(txnFee))
     );
 
-    if (self.type != RCTTypeNull)
+    if (self.type != RCTType::Null)
     {
       if (!ecdhInfo || !outPk || !txnFee)
         WIRE_DLOG_THROW(wire::error::schema::missing_key, "Expected fields `encrypted`, `commitments`, and `fee`");

@@ -33,7 +33,7 @@
 #include <utility>
 #include <zmq.h>
 
-#include "byte_slice.h"    // monero/contrib/epee/include
+#include "epee/byte_slice.h"    // monero/contrib/epee/include
 #include "common/expect.h" // monero/src
 #include "rpc/message.h"   // monero/src
 #include "rpc/daemon_pub.h"

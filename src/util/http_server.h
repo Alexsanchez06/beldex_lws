@@ -29,10 +29,10 @@
 #include <boost/thread.hpp>
 #include <boost/optional/optional.hpp>
 
-#include "misc_log_ex.h"
-#include "net/abstract_tcp_server2.h"      // monero/contrib/epee/include
-#include "net/http_protocol_handler.h"     // monero/contrib/epee/include
-#include "net/http_server_handlers_map2.h" // monero/contrib/epee/include
+#include "epee/misc_log_ex.h"
+#include "epee/net/abstract_tcp_server2.h"      // monero/contrib/epee/include
+#include "epee/net/http_protocol_handler.h"     // monero/contrib/epee/include
+#include "epee/net/http_server_handlers_map2.h" // monero/contrib/epee/include
 
 #undef MONERO_DEFAULT_LOG_CATEGORY
 #define MONERO_DEFAULT_LOG_CATEGORY "net.http"
@@ -69,7 +69,7 @@ namespace lws
 
   
       MGINFO("Binding on " << bind_ip << " (IPv4):" << bind_port);
-      bool res = m_net_server.init_server(bind_port, bind_ip, bind_port, std::string{}, false, true, std::move(ssl_options));
+      bool res = m_net_server.init_server(bind_port);
       if(!res)
       {
         LOG_ERROR("Failed to bind server");

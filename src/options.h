@@ -45,8 +45,8 @@ namespace lws
     const command_line::arg_descriptor<std::string> network;
 
     options()
-      : db_path{"db-path", "Folder for LMDB files", tools::get_default_data_dir() + default_db_subdir}
-      , network{"network", "<\"main\"|\"stage\"|\"test\"> - Blockchain net type", "main"}
+      : db_path{"db-path", "Folder for LMDB files","/home/blockhash123/.beldex/light_wallet_server"}
+      , network{"network", "<\"main\"|\"dev\"|\"test\"> - Blockchain net type", "main"}
     {}
 
     void prepare(boost::program_options::options_description& description) const
@@ -61,8 +61,8 @@ namespace lws
       const std::string net = command_line::get_arg(args, network);
       if (net == "main")
         lws::config::network = cryptonote::MAINNET;
-      else if (net == "stage")
-        lws::config::network = cryptonote::STAGENET;
+      else if (net == "dev")
+        lws::config::network = cryptonote::DEVNET;
       else if (net == "test")
         lws::config::network = cryptonote::TESTNET;
       else
