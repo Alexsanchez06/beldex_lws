@@ -17,6 +17,8 @@
         "deque": "cpp",
         "list": "cpp",
         "initializer_list": "cpp",
-        "ranges": "cpp"
+        "ranges": "cpp",
+        "*.ipp": "cpp",
+        "unordered_set": "cpp"
     }
 }

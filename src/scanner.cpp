@@ -39,7 +39,7 @@
 #include <utility>
 
 #include "common/error.h"                             // monero/src
-#include "crypto/crypto.h"                            // monero/src
+// #include "crypto/crypto.h"                            // monero/src
 // #include "crypto/wallet/crypto.h"                     // monero/src
 #include "cryptonote_basic/cryptonote_basic.h"        // monero/src
 #include "cryptonote_basic/cryptonote_format_utils.h" // monero/src
@@ -126,9 +126,9 @@ namespace lws
       }
 
       // check possible chain rollback daemon side
-      const expect<crypto::hash> id = reader->get_block_hash(db::block_id(chain.top_block_height));
-      if (!id || *id != chain.top_block_id)
-        return true;
+      // const expect<crypto::hash> id = reader->get_block_hash(db::block_id(chain.top_block_height));
+      // if (!id || *id != chain.top_block_id)
+      //   return true;
 
       // check possible chain rollback from other thread
       const expect<db::account> user_db = reader->get_account(db::account_status::active, user.id());

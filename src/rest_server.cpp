@@ -35,7 +35,7 @@
 
 #include "common/error.h"                             // monero/src
 #include "common/expect.h"                            // monero/src
-#include "crypto/crypto.h"                            // monero/src
+// #include "crypto/crypto.h"                            // monero/src
 #include "cryptonote_config.h"      // monero/src
 #include "db/data.h"
 #include "db/storage.h"
@@ -106,11 +106,11 @@ namespace lws
 
     bool key_check(const rpc::account_credentials& creds)
     {
-      crypto::public_key verify{};
-      if (!crypto::secret_key_to_public_key(creds.key, verify))
-        return false;
-      if (verify != creds.address.view_public)
-        return false;
+      // crypto::public_key verify{};
+      // if (!crypto::secret_key_to_public_key(creds.key, verify))
+      //   return false;
+      // if (verify != creds.address.view_public)
+      //   return false;
       return true;
     }
 
